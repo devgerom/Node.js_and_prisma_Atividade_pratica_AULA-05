@@ -6,10 +6,28 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  output   = "../node_modules/@prisma/client"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
+}
+
+model Authors{
+  id String @id @default(uuid())
+  name String @unique
+  biography String?
+  books Books[]
+  @@map("authors")
+}
+
+model Books{
+  id String @id @default(uuid())
+  title String
+  release_year Int
+  author Authors @relation(fields: [author_id], references: [id])
+  author_id String 
+
+  @@map("books")
 }
